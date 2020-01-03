@@ -10,8 +10,8 @@ import (
 
 	"github.com/sethvargo/go-password/password"
 
-	"github.com/alexellis/k3sup/pkg/env"
 	"github.com/alexellis/k3sup/pkg/config"
+	"github.com/alexellis/k3sup/pkg/env"
 
 	"github.com/spf13/cobra"
 )
@@ -193,10 +193,14 @@ func makeInstallOpenFaaS() *cobra.Command {
 			overrides["serviceType"] = "LoadBalancer"
 		}
 
+		wait := false
 		if helm3 {
 			outputPath := path.Join(chartPath, "openfaas")
 
-			err := helm3Upgrade(outputPath, "openfaas/openfaas", namespace, "values"+valuesSuffix+".yaml", overrides)
+			err := helm3Upgrade(outputPath, "openfaas/openfaas", namespace,
+				"values"+valuesSuffix+".yaml",
+				overrides, wait)
+
 			if err != nil {
 				return err
 			}
